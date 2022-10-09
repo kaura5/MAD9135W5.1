@@ -1,23 +1,53 @@
-import logo from './logo.svg';
+import AppHeader from './AppHeader';
+import Home from './Home';
+import About from './About';
+import Projects from './Projects';
 import './App.css';
+import NavBar from './NavBar';
+import Project from './Project';
+import ProjectList from './ProjectList';
+import NotFound from './NotFound';
+import { Routes, Route, useRoutes, Navigate } from 'react-router-dom';
 
 function App() {
+
+  const element = useRoutes([
+    {
+      path: '/',
+      element: <Home />
+    },
+    {
+      path: "/about",
+      element: <About />
+    },
+    {
+      path: "/projects",
+      children: [
+        { index: true, element: <Projects /> },
+        { path: ":id", element: <Project /> }
+      ]
+    }
+  ])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AppHeader />
+      <NavBar />
+      {/* {element} */}
+      <aside>
+      <Routes>
+        <Route />
+      </Routes>
+      </aside>
+      <Routes>
+        <Route path="/home" element={<Home />} />
+        <Route path="/about" element={<Navigate to="/projects" />} />
+        <Route path="/projects" element={<ProjectList />}>
+          <Route index element={<Projects />} />
+          <Route path=":x" element={<Project />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </div>
   );
 }
